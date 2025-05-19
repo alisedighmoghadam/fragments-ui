@@ -1,12 +1,14 @@
 "use client";
 import { signIn, getUser } from "./auth";
 import { useEffect, useState } from "react";
+import { getUserFragments } from "./api";
 export default function Home() {
   const [authenticated, setAuthenticated] = useState(false);
   const [username, setUserName] = useState();
   useEffect(() => {
     async function fetchUser() {
       const user = await getUser();
+      const userFragments = await getUserFragments(user);
       if (user) {
         setUserName(user.username);
         setAuthenticated(true);
