@@ -1,7 +1,7 @@
 // src/api.js
 
 // fragments microservice API to use, defaults to localhost:8080 if not set in env
-const apiUrl = process.env.API_URL || "http://localhost:8080";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 /**
  * Given an authenticated user, request all fragments for this user from the
@@ -16,6 +16,28 @@ export async function getUserFragments(user) {
       // We are using the `authorizationHeaders()` helper method we defined
       // earlier, to automatically attach the user's ID token.
       headers: user.authorizationHeaders(),
+    });
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`);
+    }
+    const data = await res.json();
+    console.log("Successfully got user fragments data", { data });
+    return data;
+  } catch (err) {
+    console.error("Unable to call GET /v1/fragment", { err });
+  }
+}
+
+export async function postFragmentData(user, body, type) {
+  try {
+    console.log(type);
+    const res = await fetch(`${apiUrl}/v1/fragments`, {
+      headers: {
+        Authorization: user.authorizationHeaders().Authorization,
+        "Content-Type": type,
+      },
+      method: "POST",
+      body: body,
     });
     if (!res.ok) {
       throw new Error(`${res.status} ${res.statusText}`);
