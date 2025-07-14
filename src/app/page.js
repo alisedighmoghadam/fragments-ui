@@ -1,4 +1,5 @@
 "use client";
+import "./page.css";
 import { signIn, getUser } from "./auth";
 import { useEffect, useState } from "react";
 import { getUserFragments, postFragmentData } from "./api";
@@ -51,7 +52,11 @@ export default function Home() {
             value={contentType}
             onChange={(e) => setContentType(e.target.value)}
           >
-            <option value="text/html">text/html</option>
+            <option value="text/plain">text/plain (.txt)</option>
+            <option value="text/html">text/html (.html)</option>
+            <option value="text/markdown">text/markdown (.md)</option>
+            <option value="text/csv">text/csv (.csv)</option>
+            <option value="application/json">application/json (.json)</option>
           </select>
           <br></br>
           <label for="content">Content:</label>
@@ -61,7 +66,7 @@ export default function Home() {
             id="content"
             rows="6"
             cols="50"
-            placeholder="Write your HTML content here..."
+            placeholder={`Write your ${contentType} content here...`}
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></textarea>
