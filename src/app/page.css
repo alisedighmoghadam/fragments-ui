@@ -102,3 +102,22 @@ select:focus {
   border-color: #1c5980; /* color when focused */
   box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.3);
 }
+
+.main-layout {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem; /* margin between left and right */
+  margin-top: 2rem;
+}
+
+.left-panel {
+  flex: 2;
+}
+
+.right-panel {
+  flex: 1.2;
+}
+
+.fragments {
+  text-align: left;
+}
