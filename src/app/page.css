@@ -1,123 +1,319 @@
-/* Basic Reset */
-* {
+/* --- Base --- */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+}
+
+:root {
+  --bg: #0f1115;
+  --panel: #151823;
+  --panel-alt: #1b2030;
+  --text: #e8eaf0;
+  --muted: #a8b0c2;
+  --accent: #4f8cff;
+  --accent-2: #22c55e;
+  --danger: #ef4444;
+  --border: #2a3146;
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+html, body {
+  height: 100%;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
-  padding: 2rem;
-  color: #333;
+  margin: 0;
+  font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background: radial-gradient(1000px 600px at 0% 0%, #1a1f2f 0%, #0d0f15 70%), var(--bg);
 }
 
-h1 {
-  font-size: 2rem;
-  color: #2c3e50;
-  margin-bottom: 1rem;
-  text-align: center;
+/* --- Layout --- */
+.main-layout {
+  display: flex;
+  min-height: 100vh;
 }
 
-h2 {
-  font-size: 1.5rem;
-  color: #34495e;
-  margin-top: 1rem;
+/* Fixed left panel */
+.left-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 100vh;
+  padding: 24px;
+  overflow-y: auto;
+  background:
+    radial-gradient(800px 400px at 0% 0%, rgba(79,140,255,.12), transparent 60%),
+    radial-gradient(700px 300px at 100% 100%, rgba(34,197,94,.08), transparent 60%),
+    var(--panel);
+  border-right: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
-.username {
-  font-weight: bold;
-  color: #2980b9;
+/* Scrollable right panel */
+.right-panel {
+  margin-left: 320px;            /* space for fixed sidebar */
+  flex: 1;
+  min-width: 0;                  /* fix overflow with long content */
+  padding: 24px;
+  overflow-y: auto;
 }
 
-nav {
-  text-align: center;
-  margin-bottom: 1.5rem;
+/* Optional section wrapper for fragments grid/list */
+.right-panel.fragments {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 }
 
-button {
-  padding: 0.6rem 1.2rem;
-  background-color: #3498db;
+/* --- Typography --- */
+h1, h2, h3 {
+  margin: 0 0 12px;
+  line-height: 1.2;
+}
+h1 { font-size: 28px; }
+h2 { font-size: 18px; color: var(--muted); font-weight: 600; }
+.username { color: var(--accent); }
+
+/* --- Buttons --- */
+button, .btn {
+  appearance: none;
+  border: 0;
+  background: linear-gradient(180deg, #5a93ff, #3c72e6);
   color: white;
-  border: none;
-  border-radius: 5px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease;
+  box-shadow: 0 6px 16px rgba(79,140,255,.35);
+}
+button:hover, .btn:hover { transform: translateY(-1px); }
+button:active, .btn:active { transform: translateY(0); opacity: .9; }
+
+button.secondary {
+  background: linear-gradient(180deg, #2a3146, #22283a);
+  color: var(--text);
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
 }
 
-button:disabled {
-  background-color: #bdc3c7;
-  cursor: not-allowed;
+button.danger {
+  background: linear-gradient(180deg, #f87171, #ef4444);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, .35);
 }
 
-button:hover:not(:disabled) {
-  background-color: #2980b9;
-}
-
+/* --- Forms --- */
 form {
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin: auto;
+  display: grid;
+  gap: 12px;
+  background: var(--panel-alt);
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
 label {
   display: block;
-  margin-top: 1rem;
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
 }
 
+input[type="text"],
 select,
 textarea {
   width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.4rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0f1422;
+  color: var(--text);
+  outline: none;
 }
 
 textarea {
   resize: vertical;
+  min-height: 120px;
 }
 
-#user {
-  margin-top: 2rem;
-  text-align: center;
-}
-select {
-  border: 3px solid #2980b9; /* thicker border */
-  padding: 0.5rem;
-  border-radius: 5px;
-  font-size: 1rem;
-  outline: none;
-  background-color: white;
-  transition: border-color 0.3s ease;
-}
-
-select:focus {
-  border-color: #1c5980; /* color when focused */
-  box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.3);
-}
-
-.main-layout {
+/* --- File upload row --- */
+.file-row {
   display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, #2a3146, #22283a);
+  color: var(--text);
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  user-select: none;
+}
+
+.hidden-file {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+.file-name {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* --- Fragment card (optional, used by <FragmentCard/>) --- */
+.fragment-card {
+  background: #0f1422;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
+
+.fragment-card.active {
+  outline: 2px solid rgba(79,140,255,.35);
+}
+
+.fragment-card .row {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 2rem; /* margin between left and right */
-  margin-top: 2rem;
+  gap: 8px;
 }
 
-.left-panel {
-  flex: 2;
+/* --- Utilities --- */
+[hidden] { display: none !important; }
+
+nav { margin-bottom: 16px; }
+
+/* --- Scrollbar (WebKit) --- */
+.right-panel::-webkit-scrollbar,
+.left-panel::-webkit-scrollbar {
+  width: 10px;
+}
+.right-panel::-webkit-scrollbar-track,
+.left-panel::-webkit-scrollbar-track {
+  background: #0d1220;
+}
+.right-panel::-webkit-scrollbar-thumb,
+.left-panel::-webkit-scrollbar-thumb {
+  background: #23304c;
+  border-radius: 10px;
+  border: 2px solid #0d1220;
 }
 
-.right-panel {
-  flex: 1.2;
+/* --- Responsive --- */
+@media (max-width: 980px) {
+  .left-panel { width: 280px; }
+  .right-panel { margin-left: 280px; }
 }
 
-.fragments {
-  text-align: left;
+@media (max-width: 760px) {
+  .left-panel {
+    position: fixed;
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    overflow-y: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .right-panel {
+    margin-left: 0;
+    margin-top: calc( var(--left-height, 0px) );
+    padding-top: 16px;
+  }
+  /* If you want a toggleable sidebar on mobile, you can add a class to collapse it. */
 }
+/* Fragment card skeleton */
+.fragment-card {
+  position: relative;
+  margin: 16px 0;
+  background: #0f1422;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  overflow-wrap: anywhere;
+}
+.fragment-card:hover { box-shadow: 0 12px 26px rgba(0,0,0,.30); }
+
+.fragment-card.active {
+  border-width: 2px;
+  border-color: rgba(79,140,255,.6);
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 12px 28px rgba(79,140,255,.18);
+}
+
+/* Close button */
+.fragment-card__close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  height: 32px;
+  width: 32px;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  background: #0f1422;
+  color: var(--accent);
+  font-weight: 700;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px rgba(79,140,255,.35);
+  cursor: pointer;
+}
+.fragment-card__close:hover { background: rgba(79,140,255,.08); }
+
+/* Titles & meta */
+.fragment-card__title { font-size: 18px; font-weight: 700; margin: 0 0 8px; }
+.fragment-card__subtitle { font-size: 14px; font-weight: 600; color: var(--muted); margin: 12px 0 8px; }
+
+.fragment-card__meta { font-size: 13px; color: var(--text); display: grid; gap: 6px; }
+.fragment-card__meta strong { color: var(--muted); font-weight: 600; }
+
+/* Data */
+.fragment-card__pre {
+  background: #0b1020;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 13px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.fragment-card__binary { color: #fda4af; }
+
+/* Actions */
+.fragment-card__actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.fragment-card__select {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0f1422;
+  color: var(--text);
+  outline: none;
+}
+
+/* Buttons reuse global .btn styles from earlier sheet */

@@ -66,3 +66,68 @@ export async function postFragmentData(user, body, type) {
     console.error("Unable to call GET /v1/fragment", { err });
   }
 }
+
+export async function putFragmentData(user, body, fragment) {
+  try {
+    const res = await fetch(`${apiUrl}/v1/fragments/${fragment.id}`, {
+      headers: {
+        Authorization: user.authorizationHeaders().Authorization,
+        "Content-Type": fragment.type,
+      },
+      method: "PUT",
+      body: body,
+    });
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`);
+    }
+    const data = await res.json();
+    console.log("Successfully update fragments data", { data });
+    return data;
+  } catch (err) {
+    console.error("Unable to call PUT /v1/fragment", { err });
+  }
+}
+
+export async function deleteFragment(user, id) {
+  const res = await fetch(`${apiUrl}/v1/fragments/${id}`, {
+    headers: {
+      Authorization: user.authorizationHeaders().Authorization,
+    },
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return true;
+}
+
+export async function convertFragment(user, id, ext) {
+  try {
+    const res = await fetch(`${apiUrl}/v1/fragments/${id}.${ext}`, {
+      headers: {
+        Authorization: user.authorizationHeaders().Authorization,
+      },
+      method: "GET",
+    });
+    if (!res.ok) {
+      throw new Error(
+        `Failed to convert fragment: ${res.status} ${res.statusText}`
+      );
+    }
+
+    let data;
+    const contentType = res.headers.get("Content-Type");
+    if (
+      contentType.startsWith("text/") ||
+      contentType.startsWith("application/")
+    ) {
+      data = await res.text();
+    } else {
+      // Binary data (images, etc.)
+      const arrayBuffer = await res.arrayBuffer();
+      data = new Uint8Array(arrayBuffer); // or Blob if you want to display it
+    }
+
+    return { data, contentType };
+  } catch (err) {
+    console.error("Unable to call GET /v1/fragment/:di.ext", { err });
+  }
+}
